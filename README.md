@@ -100,7 +100,10 @@ Opcionalmente puedes usar [**Postman**](https://www.postman.com/) para realizar 
 ## Comandos basicos de Kafka
 Existen una serie de comandos que nos van a ser utiles a lo largo del curso.
 
-### Crear topicos
+### Usando el cliente
+Tener en cuenta que estos son usando el cliente que nos descargamos de la pagina oficial de Kafka. Mas abajo estan los mismos comandos pero usando Docker.
+
+#### Crear topicos
 
 ```shell script
 export TOPIC=payments
@@ -120,23 +123,59 @@ bin/kafka-topics.sh --create --bootstrap-server localhost:9092 \
   --topic $TOPIC --partitions 3 --replication-factor 3
 ```
 
-### Describir la estructura de un topico
+#### Describir la estructura de un topico
 
 ```shell script
 bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic $TOPIC
 ```
 
-### Kafka Productor Consola
+#### Kafka Productor Consola
 
 ```shell script
 bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic $TOPIC
 ```
 
-### Kafka Consumidor Consola
+#### Kafka Consumidor Consola
 
 ```shell script
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
 --topic $TOPIC --from-beginning
+```
+
+### Usando Docker
+Con estos comandos para ejecutar los mismos comandos pero utilizando Docker.
+
+
+#### Crear topicos
+
+Sin replicacion
+
+```shell script
+docker exec -t zookeeper kafka-topics --create --bootstrap-server broker1:29092 --replication-factor 3 --topic $TOPIC
+```
+
+Con replicacion
+
+```shell script
+docker exec -t zookeeper kafka-topics --create --bootstrap-server broker1:29092 --replication-factor 3 --partitions 3 --topic $TOPIC
+```
+
+#### Describir la estructura de un topico
+
+```shell script
+docker exec -t zookeeper kafka-topics --describe --topic $TOPIC --bootstrap-server broker1:29092
+```
+
+#### Kafka Productor Consola
+
+```shell script
+docker exec -t broker1 kafka-console-producer --topic $TOPIC --bootstrap-server localhost:9092 
+```
+
+#### Kafka Consumidor Consola
+
+```shell script
+docker exec -t broker1 kafka-console-consumer --topic $TOPIC --bootstrap-server localhost:9092 --from-beginning
 ```
 
 ## Consideraciones
