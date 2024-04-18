@@ -90,6 +90,12 @@
             <version>${flyway-mysql.version}</version>
         </dependency>
 
+        <!-- Events -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

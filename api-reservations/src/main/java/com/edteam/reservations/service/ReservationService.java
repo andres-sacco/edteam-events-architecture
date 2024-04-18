@@ -8,6 +8,7 @@ import com.edteam.reservations.enums.APIError;
 import com.edteam.reservations.exception.EdteamException;
 import com.edteam.reservations.dto.ReservationDTO;
 import com.edteam.reservations.model.Reservation;
+import com.edteam.reservations.model.Status;
 import com.edteam.reservations.repository.ReservationRepository;
 import com.edteam.reservations.specification.ReservationSpecification;
 import jakarta.validation.*;
@@ -82,6 +83,16 @@ public class ReservationService {
         validateEntity(transformed);
         Reservation result = repository.save(Objects.requireNonNull(transformed));
         return conversionService.convert(result, ReservationDTO.class);
+    }
+
+    public void changeStatus(Long id, Status status) {
+        Optional<Reservation> reservation = repository.findById(Long.valueOf(id));
+        if (reservation.isEmpty()) {
+            LOGGER.debug("Not exist reservation with the id {}", id);
+            throw new EdteamException(APIError.RESERVATION_NOT_FOUND);
+        }
+
+        repository.updateStatusById(id, status);
     }
 
     public void delete(Long id) {
