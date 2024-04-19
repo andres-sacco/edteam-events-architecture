@@ -26,10 +26,10 @@ public class PaymentConsumer {
     public void listen(PaymentDTO message) {
         LOGGER.info("Received message: {}", message);
 
-        if(message.getStatus().equals(PaymentStatusDTO.ACCEPTED)) {
+        if (message.getStatus().equals(PaymentStatusDTO.ACCEPTED)) {
             service.changeStatus(message.getId(), Status.FINISHED);
 
-        } else if(message.getStatus().equals(PaymentStatusDTO.IN_PROGRESS)) {
+        } else if (message.getStatus().equals(PaymentStatusDTO.IN_PROGRESS)) {
             service.changeStatus(message.getId(), Status.IN_PROGRESS);
         }
 

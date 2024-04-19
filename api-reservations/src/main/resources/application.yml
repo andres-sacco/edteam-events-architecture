@@ -64,3 +64,8 @@ spring:
       value-deserializer: com.edteam.reservations.messaging.deserializer.PaymentDeserializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       client-id: reservation # To limit the quantity of requests
+
+    producer:
+      client-id: reservation
+      value-serializer: com.edteam.reservations.messaging.serializer.ReservationSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

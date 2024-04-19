@@ -7,18 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class PaymentDeserializer implements Deserializer<PaymentDTO> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentDeserializer.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Override
-    public void configure(Map<String, ?> configs, boolean isKey) {
-        // No additional configuration needed
-    }
 
     @Override
     public PaymentDTO deserialize(String topic, byte[] data) {
@@ -28,10 +22,5 @@ public class PaymentDeserializer implements Deserializer<PaymentDTO> {
             LOGGER.error("Occurs an error while deserializing payment data", e);
             return null;
         }
-    }
-
-    @Override
-    public void close() {
-        // No resources to close
     }
 }

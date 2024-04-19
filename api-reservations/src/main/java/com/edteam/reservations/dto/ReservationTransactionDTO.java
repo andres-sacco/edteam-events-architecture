@@ -2,11 +2,19 @@ package com.edteam.reservations.dto;
 
 import java.util.Objects;
 
-public class PaymentDTO {
+public class ReservationTransactionDTO {
 
     private Long id;
 
-    private PaymentStatusDTO status;
+    private StatusDTO status;
+
+    public ReservationTransactionDTO() {
+    }
+
+    public ReservationTransactionDTO(Long id, StatusDTO status) {
+        this.id = id;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -16,11 +24,11 @@ public class PaymentDTO {
         this.id = id;
     }
 
-    public PaymentStatusDTO getStatus() {
+    public StatusDTO getStatus() {
         return status;
     }
 
-    public void setStatus(PaymentStatusDTO status) {
+    public void setStatus(StatusDTO status) {
         this.status = status;
     }
 
@@ -30,7 +38,7 @@ public class PaymentDTO {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        PaymentDTO that = (PaymentDTO) o;
+        ReservationTransactionDTO that = (ReservationTransactionDTO) o;
         return Objects.equals(id, that.id) && status == that.status;
     }
 
@@ -41,6 +49,6 @@ public class PaymentDTO {
 
     @Override
     public String toString() {
-        return "PaymentDTO{" + "id=" + id + ", status=" + status + '}';
+        return "ReservationTransactionDTO{" + "id=" + id + ", status=" + status + '}';
     }
 }

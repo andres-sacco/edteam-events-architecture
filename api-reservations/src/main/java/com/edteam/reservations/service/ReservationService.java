@@ -2,11 +2,10 @@ package com.edteam.reservations.service;
 
 import com.edteam.reservations.connector.CatalogConnector;
 import com.edteam.reservations.connector.response.CityDTO;
-import com.edteam.reservations.dto.SearchReservationCriteriaDTO;
-import com.edteam.reservations.dto.SegmentDTO;
+import com.edteam.reservations.dto.*;
 import com.edteam.reservations.enums.APIError;
 import com.edteam.reservations.exception.EdteamException;
-import com.edteam.reservations.dto.ReservationDTO;
+import com.edteam.reservations.messaging.producer.ReservationTransactionProducer;
 import com.edteam.reservations.model.Reservation;
 import com.edteam.reservations.model.Status;
 import com.edteam.reservations.repository.ReservationRepository;
@@ -36,12 +35,15 @@ public class ReservationService {
 
     private CatalogConnector catalogConnector;
 
+    private ReservationTransactionProducer producer;
+
     @Autowired
     public ReservationService(ReservationRepository repository, ConversionService conversionService,
-            CatalogConnector catalogConnector) {
+            CatalogConnector catalogConnector, ReservationTransactionProducer producer) {
         this.repository = repository;
         this.conversionService = conversionService;
         this.catalogConnector = catalogConnector;
+        this.producer = producer;
     }
 
     public List<ReservationDTO> getReservations(SearchReservationCriteriaDTO criteria) {
@@ -86,13 +88,17 @@ public class ReservationService {
     }
 
     public void changeStatus(Long id, Status status) {
-        Optional<Reservation> reservation = repository.findById(Long.valueOf(id));
+        Optional<Reservation> reservation = repository.findById(id);
         if (reservation.isEmpty()) {
             LOGGER.debug("Not exist reservation with the id {}", id);
             throw new EdteamException(APIError.RESERVATION_NOT_FOUND);
         }
 
         repository.updateStatusById(id, status);
+
+        ReservationTransactionDTO reservationTransaction = new ReservationTransactionDTO(id,
+                conversionService.convert(status, StatusDTO.class));
+        producer.sendMessage(reservationTransaction);
     }
 
     public void delete(Long id) {
