@@ -58,7 +58,7 @@ spring:
     sql-migration-suffixes: .sql
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     consumer:
       group-id: reservation # To notify Kafka which is the group of applications
       value-deserializer: com.edteam.reservations.messaging.deserializer.PaymentDeserializer
