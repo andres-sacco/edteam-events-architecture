@@ -18,6 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Modifying
     @Transactional
-    @Query("UPDATE Reservation e SET e.status = ?1 WHERE e.id = ?2")
+    @Query("UPDATE Reservation e SET e.status = ?2 WHERE e.id = ?1")
     void updateStatusById(Long id, Status status);
 }
