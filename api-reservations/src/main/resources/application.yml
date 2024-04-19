@@ -68,4 +68,4 @@ spring:
     producer:
       client-id: reservation
       value-serializer: com.edteam.reservations.messaging.serializer.ReservationSerializer
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
