@@ -10,14 +10,14 @@ public class ReservationTransactionProducer {
 
     private static final String TOPIC = "reservation-transactions";
 
-    private final KafkaTemplate<String, ReservationTransactionDTO> kafkaTemplate;
+    private final KafkaTemplate<String, ReservationTransactionDTO> kafkaPaymentTemplate;
 
     @Autowired
-    public ReservationTransactionProducer(KafkaTemplate<String, ReservationTransactionDTO> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    public ReservationTransactionProducer(KafkaTemplate<String, ReservationTransactionDTO> kafkaPaymentTemplate) {
+        this.kafkaPaymentTemplate = kafkaPaymentTemplate;
     }
 
     public void sendMessage(ReservationTransactionDTO message) {
-        kafkaTemplate.send(TOPIC, message);
+        kafkaPaymentTemplate.send(TOPIC, message);
     }
 }
