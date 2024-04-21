@@ -9,7 +9,6 @@ import com.edteam.reservations.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.DltStrategy;
@@ -30,7 +29,7 @@ public class PaymentConsumer {
         this.service = service;
     }
 
-    @RetryableTopic(backoff = @Backoff(delay = 3000), attempts = "2", kafkaTemplate = "kafkaPaymentTemplate", dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR)
+    @RetryableTopic(backoff = @Backoff(delay = 3000), attempts = "2", kafkaTemplate = "kafkaPaymentTemplate", dltStrategy = DltStrategy.NO_DLT)
     @KafkaListener(topics = "payments", containerFactory = "consumerListenerPaymentConsumerFactory")
     public void listen(@Payload PaymentDTO message) {
         LOGGER.info("Received message: {}", message);
@@ -43,10 +42,5 @@ public class PaymentConsumer {
         } else {
             throw new EdteamException(APIError.BAD_FORMAT);
         }
-    }
-
-    @DltHandler
-    public void processMessage(PaymentDTO message) {
-        LOGGER.info("Error with the message: {}", message);
     }
 }
