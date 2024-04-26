@@ -14,10 +14,23 @@ import java.io.IOException;
 public class DocumentationController {
 
     @ResponseBody
-    @GetMapping
-    public void redirectToDocumentation(HttpServletResponse response) {
+    @GetMapping("/sync")
+    public void redirectToOpenAPIDocumentation(HttpServletResponse response) {
         try {
-            response.sendRedirect("swagger-ui.html");
+            response.sendRedirect("../swagger-ui.html");
+        } catch (IOException e) {
+            StringBuilder sb = new StringBuilder("UNEXPECTED ERROR: ");
+            if (e.getMessage() != null) {
+                sb.append(e.getMessage());
+            }
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/async")
+    public void redirectToAsyncAPIDocumentation(HttpServletResponse response) {
+        try {
+            response.sendRedirect("../springwolf/asyncapi-ui.html");
         } catch (IOException e) {
             StringBuilder sb = new StringBuilder("UNEXPECTED ERROR: ");
             if (e.getMessage() != null) {

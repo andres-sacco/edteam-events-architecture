@@ -64,3 +64,15 @@ spring:
       client-id: reservation # To limit the quantity of requests
     producer:
       client-id: reservation
+
+springwolf:
+  docket:
+    base-package: com.edteam.reservations
+    info:
+      title: AsyncAPI Definition
+      version: 1.0.0
+      description: Asynchronous communication
+    servers:
+      kafka:
+        protocol: kafka
+        host: ${spring.kafka.bootstrap-servers}

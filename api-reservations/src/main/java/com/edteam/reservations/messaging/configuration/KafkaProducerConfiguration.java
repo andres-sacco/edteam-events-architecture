@@ -25,7 +25,6 @@ public class KafkaProducerConfiguration {
     @Value(value = "${spring.kafka.producer.client-id}")
     private String producerClientId;
 
-
     @Bean
     public ProducerFactory<String, PaymentDTO> producerPaymentFactory() {
         Map<String, Object> configProps = new HashMap<>();

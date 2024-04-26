@@ -96,6 +96,20 @@
             <artifactId>spring-kafka</artifactId>
         </dependency>
 
+        <!-- Provides the documentation API -->
+        <dependency>
+            <groupId>io.github.springwolf</groupId>
+            <artifactId>springwolf-kafka</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Provides the UI - optional (recommended) -->
+        <dependency>
+            <groupId>io.github.springwolf</groupId>
+            <artifactId>springwolf-ui</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -148,5 +162,11 @@
 
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id/>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>
