@@ -64,3 +64,5 @@ spring:
       client-id: reservation # To limit the quantity of requests
     producer:
       client-id: reservation
+    properties:
+      schema.registry.url: http://localhost:8081

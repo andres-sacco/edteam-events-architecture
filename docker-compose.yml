@@ -110,3 +110,18 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9301
       KAFKA_DELETE_TOPIC_ENABLE: "true"
+ 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:6.1.1
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - broker1
+      - broker2
+      - broker3
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker1:29092'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
