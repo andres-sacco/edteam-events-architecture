@@ -1,0 +1,127 @@
+asyncapi: 3.0.0
+info:
+  title: AsyncAPI Definition
+  version: 1.0.0
+  description: Asynchronous communication
+  x-generator: springwolf
+defaultContentType: application/json
+servers:
+  kafka:
+    host: "localhost:9092,localhost:9093,localhost:9094"
+    protocol: kafka
+channels:
+  payments:
+    messages:
+      com.edteam.reservations.dto.PaymentDTO:
+        $ref: '#/components/messages/com.edteam.reservations.dto.PaymentDTO'
+  reservation-transactions:
+    messages:
+      com.edteam.reservations.dto.ReservationTransactionDTO:
+        $ref: '#/components/messages/com.edteam.reservations.dto.ReservationTransactionDTO'
+components:
+  schemas:
+    HeadersNotDocumented:
+      type: object
+      properties: {}
+      examples:
+        - {}
+    com.edteam.reservations.dto.PaymentDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the reservation
+          format: int64
+          examples:
+            - 1
+        status:
+          type: string
+          description: Status of the payment
+          enum:
+            - ACCEPTED
+            - IN_PROGRESS
+            - REJECTED
+          examples:
+            - IN_PROGRESS
+      description: Information about the payment of a reservation
+      examples:
+        - id: 1
+          status: IN_PROGRESS
+      required:
+        - id
+        - status
+    com.edteam.reservations.dto.ReservationTransactionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of the reservation
+          format: int64
+          examples:
+            - 1
+        status:
+          type: string
+          description: Status of the reservation
+          enum:
+            - CREATED
+            - IN_PROGRESS
+            - FINISHED
+          examples:
+            - FINISHED
+      description: Information about a transaction over a reservation
+      examples:
+        - id: 1
+          status: FINISHED
+      required:
+        - id
+        - status
+  messages:
+    com.edteam.reservations.dto.PaymentDTO:
+      headers:
+        $ref: '#/components/schemas/HeadersNotDocumented'
+      payload:
+        schemaFormat: application/vnd.aai.asyncapi+json;version=3.0.0
+        schema:
+          $ref: '#/components/schemas/com.edteam.reservations.dto.PaymentDTO'
+      name: com.edteam.reservations.dto.PaymentDTO
+      title: PaymentDTO
+      description: Information about the payment of a reservation
+      bindings:
+        kafka:
+          bindingVersion: 0.4.0
+    com.edteam.reservations.dto.ReservationTransactionDTO:
+      headers:
+        $ref: '#/components/schemas/HeadersNotDocumented'
+      payload:
+        schemaFormat: application/vnd.aai.asyncapi+json;version=3.0.0
+        schema:
+          $ref: '#/components/schemas/com.edteam.reservations.dto.ReservationTransactionDTO'
+      name: com.edteam.reservations.dto.ReservationTransactionDTO
+      title: ReservationTransactionDTO
+      description: Information about a transaction over a reservation
+      bindings:
+        kafka:
+          bindingVersion: 0.4.0
+operations:
+  payments_receive_listen:
+    action: receive
+    channel:
+      $ref: '#/channels/payments'
+    title: payments_receive
+    description: On this topic you will receive the notifications about the payment
+    bindings:
+      kafka:
+        bindingVersion: 0.4.0
+    messages:
+      - $ref: '#/channels/payments/messages/com.edteam.reservations.dto.PaymentDTO'
+  reservation-transactions_send_sendMessage:
+    action: send
+    channel:
+      $ref: '#/channels/reservation-transactions'
+    title: reservation-transactions_send
+    description: More details for the outgoing topic
+    bindings:
+      kafka:
+        bindingVersion: 0.4.0
+    messages:
+      - $ref: '#/channels/reservation-transactions/messages/com.edteam.reservations.dto.ReservationTransactionDTO'

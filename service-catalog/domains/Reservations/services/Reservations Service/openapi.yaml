@@ -1,0 +1,333 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080/api
+  description: Generated server url
+tags:
+- name: Reservation
+  description: Operations about the reservation entity
+paths:
+  /reservation/{id}:
+    get:
+      tags:
+      - Reservation
+      description: Get the information about one reservation
+      operationId: getReservationById
+      parameters:
+      - name: id
+        in: path
+        description: Id of the reservation to search
+        required: true
+        schema:
+          minimum: 1
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        "200":
+          description: Return the information of one reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDTO'
+        "404":
+          description: Reservation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        "500":
+          description: Something bad happens to obtain th reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+    put:
+      tags:
+      - Reservation
+      description: Update one reservation
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        description: Id of the reservation to update
+        required: true
+        schema:
+          minimum: 1
+          type: integer
+          format: int64
+        example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDTO'
+            examples:
+              Reservation:
+                summary: Example reservation to create
+                description: Reservation
+                value:
+                  id: 1
+                  passengers:
+                  - firstName: Andres
+                    lastName: Sacco
+                    documentNumber: "12345678"
+                    documentType: DNI
+                    birthday: 1985-01-01
+                  itinerary:
+                    segment:
+                    - origin: EZE
+                      destination: MIA
+                      departure: 2024-12-31
+                      arrival: 2025-01-01
+                      carrier: AA
+                    price:
+                      totalPrice: 1
+                      totalTax: 0
+                      basePrice: 1
+        required: true
+      responses:
+        "200":
+          description: Return the updated reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDTO'
+        "400":
+          description: Bad request of the information to persist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        "404":
+          description: Reservation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        "500":
+          description: Something bad happens to obtain th reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+    delete:
+      tags:
+      - Reservation
+      description: Delete one reservation
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        description: Id of the reservation to delete
+        required: true
+        schema:
+          minimum: 1
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        "200":
+          description: Return nothing
+          content:
+            application/json: {}
+        "404":
+          description: Reservation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        "500":
+          description: Something bad happens to obtain th reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+  /reservation:
+    get:
+      tags:
+      - Reservation
+      description: Get the information of all the reservations
+      operationId: getReservations
+      parameters:
+      - name: criteria
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/SearchReservationCriteriaDTO'
+      responses:
+        "200":
+          description: Return the information of all the reservations
+          content:
+            application/json:
+              schema:
+                type: string
+        "500":
+          description: Something bad happens to obtain th reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+    post:
+      tags:
+      - Reservation
+      description: Create one reservation
+      operationId: save
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDTO'
+            examples:
+              Reservation:
+                summary: Example reservation to create
+                description: Reservation
+                value:
+                  passengers:
+                  - firstName: Andres
+                    lastName: Sacco
+                    documentNumber: "12345678"
+                    documentType: DNI
+                    birthday: 1985-01-01
+                  itinerary:
+                    segment:
+                    - origin: BUE
+                      destination: MIA
+                      departure: 2024-12-31
+                      arrival: 2025-01-01
+                      carrier: AA
+                    price:
+                      totalPrice: 1
+                      totalTax: 0
+                      basePrice: 1
+        required: true
+      responses:
+        "200":
+          description: Return the created reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDTO'
+        "400":
+          description: Bad request of the information to persist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+        "500":
+          description: Something bad happens to obtain th reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+components:
+  schemas:
+    ItineraryDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        version:
+          type: integer
+          format: int64
+        segment:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDTO'
+        price:
+          $ref: '#/components/schemas/PriceDTO'
+    PassengerDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        documentNumber:
+          type: string
+        documentType:
+          type: string
+        birthday:
+          type: string
+          format: date
+    PriceDTO:
+      type: object
+      properties:
+        totalPrice:
+          type: number
+        totalTax:
+          type: number
+        basePrice:
+          type: number
+    ReservationDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        version:
+          type: integer
+          format: int64
+        passengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PassengerDTO'
+        itinerary:
+          $ref: '#/components/schemas/ItineraryDTO'
+        creationDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - CREATED
+          - IN_PROGRESS
+          - FINISHED
+    SegmentDTO:
+      type: object
+      properties:
+        origin:
+          type: string
+        destination:
+          type: string
+        departure:
+          type: string
+        arrival:
+          type: string
+        carrier:
+          type: string
+    ErrorDTO:
+      type: object
+      properties:
+        description:
+          type: string
+        reasons:
+          type: array
+          items:
+            type: string
+    SearchReservationCriteriaDTO:
+      type: object
+      properties:
+        itineraryId:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        reservationDate:
+          type: string
+          format: date
+        sortField:
+          type: string
+        sortingDirection:
+          type: string
+        pageActual:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
