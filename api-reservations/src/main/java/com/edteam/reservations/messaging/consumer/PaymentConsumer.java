@@ -33,12 +33,7 @@ public class PaymentConsumer {
         this.service = service;
     }
 
-    @AsyncListener(
-            operation = @AsyncOperation(
-                    channelName = TOPIC,
-                    description = "On this topic you will receive the notifications about the payment"
-            )
-    )
+    @AsyncListener(operation = @AsyncOperation(channelName = TOPIC, description = "On this topic you will receive the notifications about the payment"))
     @KafkaAsyncOperationBinding
     @RetryableTopic(backoff = @Backoff(delay = 3000), attempts = "2", kafkaTemplate = "kafkaPaymentTemplate", dltStrategy = DltStrategy.NO_DLT)
     @KafkaListener(topics = TOPIC, containerFactory = "consumerListenerPaymentConsumerFactory")
