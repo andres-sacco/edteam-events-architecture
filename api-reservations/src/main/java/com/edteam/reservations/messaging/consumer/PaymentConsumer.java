@@ -13,7 +13,6 @@ import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.kafka.retrytopic.DltStrategy;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 
