@@ -40,11 +40,12 @@ public class PaymentConsumer {
     public void listen(@Payload PaymentDTO message) {
         LOGGER.info("Received message: {}", message);
 
-        if (message.getStatus().equals(PaymentStatusDTO.ACCEPTED)) {
+        if (message.getStatus().equals(PaymentStatusDTO.ACCEPTED.toString())) {
             service.changeStatus(message.getId(), Status.FINISHED);
 
-        } else if (message.getStatus().equals(PaymentStatusDTO.IN_PROGRESS)) {
+        } else if (message.getStatus().equals(PaymentStatusDTO.IN_PROGRESS.toString())) {
             service.changeStatus(message.getId(), Status.IN_PROGRESS);
+
         } else {
             throw new EdteamException(APIError.BAD_FORMAT);
         }

@@ -1,8 +1,8 @@
 package com.edteam.reservations.service;
 
+import com.edteam.reservations.dto.*;
 import com.edteam.reservations.connector.CatalogConnector;
 import com.edteam.reservations.connector.response.CityDTO;
-import com.edteam.reservations.dto.*;
 import com.edteam.reservations.enums.APIError;
 import com.edteam.reservations.exception.EdteamException;
 import com.edteam.reservations.messaging.producer.ReservationTransactionProducer;
@@ -96,8 +96,7 @@ public class ReservationService {
 
         repository.updateStatusById(id, status);
 
-        ReservationTransactionDTO reservationTransaction = new ReservationTransactionDTO(id,
-                conversionService.convert(status, StatusDTO.class));
+        ReservationTransactionDTO reservationTransaction = new ReservationTransactionDTO(id, status.toString());
         producer.sendMessage(reservationTransaction);
     }
 

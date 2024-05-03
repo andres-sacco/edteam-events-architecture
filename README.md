@@ -178,6 +178,40 @@ docker exec -t broker1 kafka-console-producer --topic $TOPIC --bootstrap-server 
 docker exec -t broker1 kafka-console-consumer --topic $TOPIC --bootstrap-server localhost:9092 --from-beginning
 ```
 
+### Schema Registry
+
+####  Setear la compatibilidad
+```shell script
+curl -X PUT -H "Content-Type: application/json" \
+--data '{"compatibility": "BACKWARD"}' \
+http://localhost:8081/config
+```
+
+####  Crear esquemas
+```shell script
+curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+--data '{"schema": "{\"type\":\"record\",\"name\":\"xxxxDTO\",\"namespace\":\"xxxxxx\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}"}' \
+http://localhost:8081/subjects/${TOPIC_NAME}/versions/
+```
+
+####  Obtener informacion del esquema
+```shell script
+curl -X GET http://localhost:8081/subjects/${TOPIC_NAME}/versions/latest
+```
+
+####  Eliminar el esquema
+```shell script
+curl --location --request DELETE 'http://localhost:8081/subjects/${TOPIC_NAME}/versions/latest' \
+--header 'Content-Type: application/vnd.schemaregistry.v1+json'
+```
+
+####  Comprobar la compatibilidad
+```shell script
+curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+--data '{"schema": "{\"type\":\"record\",\"name\":\"PaymentDTO\",\"namespace\":\"com.edteam.reservations.dto\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}"}' \
+http://localhost:8081/compatibility/subjects/payments/versions/latest
+```
+
 ## Consideraciones
 
 Para ejecutar todos los microservicios en la misma máquina, debes considerar que los siguientes puertos deben estar disponibles para usarlo:
