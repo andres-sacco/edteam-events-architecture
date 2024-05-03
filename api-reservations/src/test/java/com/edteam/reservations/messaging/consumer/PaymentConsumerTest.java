@@ -5,8 +5,7 @@ import com.edteam.reservations.enums.APIError;
 import com.edteam.reservations.exception.EdteamException;
 import com.edteam.reservations.model.Status;
 import com.edteam.reservations.service.ReservationService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@Tags(@Tag("consumer"))
+@DisplayName("Check the logic associate it with the consumer")
 class PaymentConsumerTest {
 
     @Mock
@@ -28,8 +29,10 @@ class PaymentConsumerTest {
         MockitoAnnotations.initMocks(this);
     }
 
+    @Tag("success-case")
+    @DisplayName("should process an accepted payment event")
     @Test
-    void testListen_AcceptedStatus() {
+    void listen_should_process_payment_accepted_event() {
 
         // Given
         PaymentDTO message = new PaymentDTO();
@@ -43,8 +46,10 @@ class PaymentConsumerTest {
         verify(service, times(1)).changeStatus(1L, Status.FINISHED);
     }
 
+    @Tag("success-case")
+    @DisplayName("should process an in progress payment event")
     @Test
-    void testListen_InProgressStatus() {
+    void listen_should_process_payment_in_progress_event() {
         // Given
         PaymentDTO message = new PaymentDTO();
         message.setId(1L);
@@ -57,8 +62,10 @@ class PaymentConsumerTest {
         verify(service, times(1)).changeStatus(1L, Status.IN_PROGRESS);
     }
 
+    @Tag("error-case")
+    @DisplayName("should produce an error with a unknown status")
     @Test
-    void testListen_BadFormatStatus() {
+    void listen_should_throw_an_error_with_unknown_status() {
         // Given
         PaymentDTO message = new PaymentDTO();
         message.setId(1L);
