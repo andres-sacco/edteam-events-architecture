@@ -48,13 +48,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
-    show-sql: true
+    show-sql: false
 
   flyway:
-    enabled: false
     locations: classpath:db
     sql-migration-prefix: V
     repeatable-sql-migration-prefix: R
@@ -62,4 +58,11 @@ spring:
     sql-migration-suffixes: .sql
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+    consumer:
+      group-id: reservation # To notify Kafka which is the group of applications
+      client-id: reservation # To limit the quantity of requests
+    producer:
+      client-id: reservation
+    properties:
+      schema.registry.url: http://localhost:8081
