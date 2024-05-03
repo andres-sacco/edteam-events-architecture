@@ -37,7 +37,7 @@ class APITest {
                             Wait.forLogMessage(".*Server started, listening for requests.*\\n", 1))
                     .waitingFor("api-reservation-db",
                             Wait.forLogMessage(".*MySQL init process done. Ready for start up.*\\n", 1))
-                    .waitingFor("kafka-init", Wait.forLogMessage(".*topic reservations-payments was create.*\\n", 1))
+                    .waitingFor("kafka-init", Wait.forLogMessage(".*topic reservation-transactions was create.*\\n", 1))
                     .withLocalCompose(true);
 
     @Autowired
