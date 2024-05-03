@@ -3,6 +3,9 @@ package com.edteam.reservations.messaging;
 import com.edteam.reservations.dto.PaymentDTO;
 import com.edteam.reservations.enums.APIError;
 import com.edteam.reservations.messaging.consumer.ReservationTransactionConsumer;
+import com.edteam.reservations.model.Reservation;
+import com.edteam.reservations.model.Status;
+import com.edteam.reservations.repository.ReservationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,6 +46,9 @@ class APITest {
     @Autowired
     ReservationTransactionConsumer consumer;
 
+    @Autowired
+    ReservationRepository repository;
+
     @BeforeAll
     static void setUp() {
         dockerComposeContainer.start();
@@ -63,9 +70,13 @@ class APITest {
         // Then
         boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
 
+        Optional<Reservation> result = repository.findById(1L);
+
         assertAll(
                 () -> assertTrue(messageConsumed),
-                () -> assertThat(consumer.getPayload(), containsString("{\"id\": 1, \"status\": \"FINISHED\"}")));
+                () -> assertThat(consumer.getPayload(), containsString("{\"id\": 1, \"status\": \"FINISHED\"}")),
+                () -> assertTrue(result.isPresent()),
+                () -> assertEquals(Status.FINISHED, result.get().getStatus()));
     }
 
 }
