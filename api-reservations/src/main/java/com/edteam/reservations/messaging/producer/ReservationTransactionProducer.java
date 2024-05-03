@@ -20,12 +20,7 @@ public class ReservationTransactionProducer {
         this.kafkaPaymentTemplate = kafkaPaymentTemplate;
     }
 
-    @AsyncPublisher(
-            operation = @AsyncOperation(
-                    channelName = TOPIC,
-                    description = "More details for the outgoing topic"
-            )
-    )
+    @AsyncPublisher(operation = @AsyncOperation(channelName = TOPIC, description = "More details for the outgoing topic"))
     @KafkaAsyncOperationBinding
     public void sendMessage(ReservationTransactionDTO message) {
         kafkaPaymentTemplate.send(TOPIC, message);

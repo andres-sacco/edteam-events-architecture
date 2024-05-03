@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "ReservationTransactionDTO",
+  "namespace": "com.edteam.reservations.dto",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    }
+  ]
+}

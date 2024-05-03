@@ -2,8 +2,7 @@ package com.edteam.reservations.messaging.configuration;
 
 import com.edteam.reservations.dto.PaymentDTO;
 import com.edteam.reservations.dto.ReservationTransactionDTO;
-import com.edteam.reservations.messaging.serializer.PaymentSerializer;
-import com.edteam.reservations.messaging.serializer.ReservationSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,13 +24,17 @@ public class KafkaProducerConfiguration {
     @Value(value = "${spring.kafka.producer.client-id}")
     private String producerClientId;
 
+    @Value(value = "${spring.kafka.properties.schema.registry.url}")
+    private String schemaRegistryURL;
+
     @Bean
     public ProducerFactory<String, PaymentDTO> producerPaymentFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, PaymentSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         configProps.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
+        configProps.put("schema.registry.url", schemaRegistryURL);
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
@@ -46,8 +49,9 @@ public class KafkaProducerConfiguration {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ReservationSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         configProps.put(ProducerConfig.CLIENT_ID_CONFIG, producerClientId);
+        configProps.put("schema.registry.url", schemaRegistryURL);
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
